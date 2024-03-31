@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./web/images/favicon.png">
+    <script src="./web/js/jquery-3.6.0.min.js"></script>
+    <title>Công đức</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            height: 100vh;
+            background-image: url('./web/images/bg.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #box,
+        #notify,
+        #mo,
+        #hand,
+        #sound,
+        #count,
+        #hit,
+        #wow,
+        span {
+            position: absolute;
+            user-select: none !important;
+        }
+
+        #box {
+            width: 25vw;
+            aspect-ratio: 1 / 1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #notify {
+            width: 30vw;
+            height: 50vh;
+            right: 0;
+        }
+
+        #count {
+            width: 30vw;
+            height: 25vh;
+            right: 0;
+            top: 50%;
+        }
+
+        @media (max-width: 768px) {
+            #notify,#count {
+                width: 35vw;
+            }
+        }
+
+        @media (min-width: 768px) {
+            #notify,#count {
+                width: 35vw;
+            }
+        }
+
+        @media screen and (max-width: 576px) {
+            #box {
+                width: 35vw;
+            }
+
+            span {
+                color: #fff;
+                font-size: 6.5vw;
+            }
+        }
+
+        @media screen and (min-width: 576px) and (max-width: 768px) {
+            #box {
+                width: 45vw;
+            }
+
+            span {
+                color: #fff;
+                font-size: 6vw;
+            }
+        }
+
+        @media screen and (min-width: 768px) and (max-width: 992px) {
+            #box {
+                width: 35vw;
+            }
+
+            span {
+                color: #fff;
+                font-size: 5vw;
+            }
+        }
+
+        @media screen and (min-width: 992px) and (max-width: 1200px) {
+            span {
+                color: #fff;
+                font-size: 4vw;
+            }
+        }
+
+        @media screen and (min-width: 1200px) and (max-width: 1400px) {
+            span {
+                color: #fff;
+                font-size: 4vw;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            span {
+                color: #fff;
+                font-size: 2.8vw;
+            }
+        }
+
+        #mo {
+            width: 80%;
+            bottom: 0px;
+            left: 10%;
+            transform-origin: 0 0;
+        }
+
+        #sound {
+            width: 20%;
+            top: 38%;
+            left: 88%;
+        }
+
+        #hand {
+            width: 100%;
+            top: 10%;
+            left: -8%;
+            transform: rotate(-50deg);
+            transform-origin: 0 0;
+            transition: 0.075s;
+        }
+
+        .knock {
+            transform: rotate(2deg) !important;
+        }
+
+        .shake {
+            transform: rotate(2deg) !important;
+        }
+
+        .d-none {
+            display: none !important;
+        }
+
+        #notify span {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: 1s hide linear;
+        }
+
+        @keyframes hide {
+            0% {
+                bottom: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                bottom: 50%;
+                opacity: 0;
+            }
+        }
+
+        #hit {
+            top: 20%;
+            right: 20%;
+            transform: translate(0%, -50%);
+            width: 50%;
+        }
+
+        .scale {
+            animation: 0.3s scale linear infinite;
+        }
+
+        @keyframes scale {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <img src="./web/images/mo.png" id="mo" />
+        <img src="./web/images/hand.png" id="hand" />
+        <img class="d-none" src="./web/images/sound.png" id="sound" />
+    </div>
+    <div id="notify"></div>
+    <div id="count">
+        <span id="hit" style='color:yellow;'></span>
+        <!-- <img src="./web/images/WOWW.png" id="wow"/> -->
+    </div>
+    <script>
+        var knocking = false;
+        var audio = new Audio('./web/sounds/bonk_7zPAD7C.mp3');
+        var hit = 1;
+        var removeCount;
+        $('body').mousedown(() => {
+            $('#hand').addClass('knock');
+            $('#mo').addClass('shake');
+            $('#sound').removeClass('d-none');
+            $('#hit').removeClass('d-none').addClass('scale');
+            span()
+            if(hit > 10) {
+                $('#hit').html(`<b>CÔNG ĐỨC VÔ LƯỢNG!</b>`);
+            } else {
+                $('#hit').text(`HIT x${hit}`);
+            }
+            hit +=1;
+            knocking = true;
+            if(knocking) {
+                clearTimeout(removeCount);
+            }
+            audio.currentTime = 0;
+            audio.play();
+            setTimeout(() => {
+                $('#hand').removeClass('knock');
+                $('#mo').removeClass('shake');
+                $('#sound').addClass('d-none');
+                $('#hit').addClass('d-none').addClass('scale');
+            }, 100)
+
+            removeCount = setTimeout(() => {
+                knocking = false;
+                hit = 1;
+            },800)
+        })
+
+        function span() {
+            let span = $('<span></span>');
+            span.text('+1 công đức');
+            span.addClass('')
+            $('#notify').append(span)
+            setTimeout(() => {
+                span.remove()
+            }, 800)
+        }
+    </script>
+</body>
+
+</html>
